@@ -1,0 +1,43 @@
+spin_manifest_version = 2
+
+[application]
+name = "PI"
+version = "0.1.1"
+authors = ["kunjee17"]
+description = "PI Health Apps"
+
+[[trigger.http]]
+route = "/api"
+component = "api"
+
+[component.api]
+source = "apps/api/target/wasm32-wasi/release/api.wasm"
+allowed_outbound_hosts = []
+[component.api.build]
+command = "cargo build --target wasm32-wasi --release"
+workdir = "apps/api"
+watch = ["src/**/*.rs", "Cargo.toml"]
+
+[[trigger.http]]
+route = "/..."
+component = "web"
+
+[component.web]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.2.1/spin_static_fs.wasm", digest = "sha256:5f05b15f0f7cd353d390bc5ebffec7fe25c6a6d7a05b9366c86dcb1a346e9f0f" }
+files = [{ source = "apps/web/dist", destination = "/" }]
+[component.web.build]
+command = "pnpm run build"
+workdir = "apps/web"
+watch = ["app/**/*.{ts,tsx,css}"]
+
+[[trigger.http]]
+route = "/admin/..."
+component = "admin"
+
+[component.admin]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.2.1/spin_static_fs.wasm", digest = "sha256:5f05b15f0f7cd353d390bc5ebffec7fe25c6a6d7a05b9366c86dcb1a346e9f0f" }
+files = [{ source = "apps/admin/dist", destination = "/" }]
+[component.admin.build]
+command = "pnpm run build"
+workdir = "apps/admin"
+watch = ["src/**/*.{ts,tsx,css}"]
