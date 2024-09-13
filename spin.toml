@@ -1,10 +1,10 @@
 spin_manifest_version = 2
 
 [application]
-name = "PI"
+name = "Test"
 version = "0.1.1"
 authors = ["kunjee17"]
-description = "PI Health Apps"
+description = "Test Apps"
 
 [[trigger.http]]
 route = "/api"
